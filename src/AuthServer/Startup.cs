@@ -42,7 +42,7 @@ namespace AuthServer {
 
           options.ConfigureDbContext = builder => builder.UseSqlServer (appDbSettings.ConnectionString);
           options.EnableTokenCleanup = true;
-          options.TokenCleanupInterval = 30;
+          // options.TokenCleanupInterval = 30;
         })
         .AddInMemoryIdentityResources (Config.GetIdentityResources ())
         .AddInMemoryApiResources (Config.GetApiResources ())
