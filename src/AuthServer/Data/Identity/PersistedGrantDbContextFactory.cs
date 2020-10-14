@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 namespace AuthServer.Data.Identity {
   public class PersistedGrantDbContextFactory : IDesignTimeDbContextFactory<PersistedGrantDbContext> {
 
-    private const string connectionString ="Server=localhost,1433;Database=AuthServer;User Id=sa;Password=Passwords1234;";
+    private const string connectionString ="Server=localhost,1433;Database=AuthServer;User Id=sa;Password=P@ssword1234;";
     public PersistedGrantDbContext CreateDbContext (string[] args) {
       var configuration = new ConfigurationBuilder();
       var optionsBuilder = new DbContextOptionsBuilder<PersistedGrantDbContext> ();

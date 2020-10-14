@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AuthServer.Data.Identity;
 using IdentityServer4.EntityFramework.DbContexts;
@@ -35,8 +36,8 @@ namespace AuthServer {
       services.AddIdentity<AppUser, IdentityRole> ()
         .AddEntityFrameworkStores<AppIdentityDbContext> ()
         .AddDefaultTokenProviders ();
-
-      services.AddIdentityServer ().AddDeveloperSigningCredential ()
+  
+      services.AddIdentityServer ()
         .AddOperationalStore (options => {
 
           options.ConfigureDbContext = builder => builder.UseSqlServer (appDbSettings.ConnectionString);
@@ -46,8 +47,8 @@ namespace AuthServer {
         .AddInMemoryIdentityResources (Config.GetIdentityResources ())
         .AddInMemoryApiResources (Config.GetApiResources ())
         .AddInMemoryClients (Config.GetClients ())
-        .AddAspNetIdentity<AppUser> ();
-
+        .AddAspNetIdentity<AppUser> ()
+        .AddDeveloperSigningCredential ();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
