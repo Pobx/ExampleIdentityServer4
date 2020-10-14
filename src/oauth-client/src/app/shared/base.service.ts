@@ -4,7 +4,7 @@ export abstract class BaseService {
   constructor() {}
 
   protected handleError(error: any) {
-    let applicationError = error.headers.get('Application-Error');
+    const applicationError = error.headers.get('Application-Error');
 
     // either application-error in header or model error in body
     if (applicationError) {
