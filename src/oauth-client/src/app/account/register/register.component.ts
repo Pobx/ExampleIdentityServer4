@@ -14,32 +14,22 @@ export class RegisterComponent implements OnInit {
   userRegistration: UserRegistration = { name: '', email: '', password: '' };
   submitted: boolean;
 
-  constructor(
-    private authService: AuthService,
-    private spinner: NgxSpinnerService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.submitted = false;
   }
 
   onSubmit() {
-    this.authService
-      .register(this.userRegistration)
-      .pipe(
-        finalize(() => {
-          this.spinner.hide();
-        })
-      )
-      .subscribe(
-        (result) => {
-          if (result) {
-            this.success = true;
-          }
-        },
-        (error) => {
-          this.error = error;
+    this.authService.register(this.userRegistration).subscribe(
+      (result) => {
+        if (result) {
+          this.success = true;
         }
-      );
+      },
+      (error) => {
+        this.error = error;
+      }
+    );
   }
 }
