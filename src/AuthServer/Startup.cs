@@ -33,10 +33,17 @@ namespace AuthServer {
 
       services.AddDbContext<AppIdentityDbContext> (options => options.UseSqlServer (appDbSettings.ConnectionString));
 
-      services.AddIdentity<AppUser, IdentityRole> ()
+      services.AddIdentity<AppUser, IdentityRole> (options => {
+          options.Password.RequireDigit = false;
+          options.Password.RequireLowercase = false;
+          options.Password.RequireNonAlphanumeric = false;
+          options.Password.RequireUppercase = false;
+          // options.Password.RequiredUniqueChars = false;
+          options.Password.RequiredLength = 4;
+        })
         .AddEntityFrameworkStores<AppIdentityDbContext> ()
         .AddDefaultTokenProviders ();
-  
+
       services.AddIdentityServer ()
         .AddOperationalStore (options => {
 
@@ -49,6 +56,11 @@ namespace AuthServer {
         .AddInMemoryClients (Config.GetClients ())
         .AddAspNetIdentity<AppUser> ()
         .AddDeveloperSigningCredential ();
+
+      services.AddCors (options => options.AddPolicy ("AllowAll", p => p.AllowAnyOrigin ()
+        .AllowAnyMethod ()
+        .AllowAnyHeader ()));
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,8 +72,9 @@ namespace AuthServer {
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts ();
       }
-      app.UseHttpsRedirection ();
+      // app.UseHttpsRedirection ();
       app.UseStaticFiles ();
+      app.UseCors ("AllowAll");
       app.UseIdentityServer ();
 
       app.UseRouting ();
