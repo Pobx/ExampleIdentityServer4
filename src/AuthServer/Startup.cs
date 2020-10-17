@@ -64,13 +64,26 @@ namespace AuthServer {
       //   .AddAspNetIdentity<AppUser> ()
       // .AddDeveloperSigningCredential ();
 
+      services.AddIdentity<AppUser, IdentityRole> (options => {
+          options.Password.RequireDigit = false;
+          options.Password.RequireLowercase = false;
+          options.Password.RequireNonAlphanumeric = false;
+          options.Password.RequireUppercase = false;
+          // options.Password.RequiredUniqueChars = false;
+          options.Password.RequiredLength = 4;
+        })
+        .AddEntityFrameworkStores<AppIdentityDbContext> ()
+        .AddDefaultTokenProviders ();
+
       services.AddIdentityServer ()
+        .AddAspNetIdentity<AppUser> ()
         .AddConfigurationStore (options => {
           options.ConfigureDbContext = b => b.UseSqlServer (appDbSettings.ConnectionString, sql => sql.MigrationsAssembly (migrationsAssembly));
         })
         .AddOperationalStore (options => {
           options.ConfigureDbContext = b => b.UseSqlServer (appDbSettings.ConnectionString, sql => sql.MigrationsAssembly (migrationsAssembly));
-        });
+        })
+        .AddDeveloperSigningCredential ();
 
       services.AddCors (options => options.AddPolicy ("AllowAll", p => p.AllowAnyOrigin ()
         .AllowAnyMethod ()
@@ -88,7 +101,7 @@ namespace AuthServer {
         app.UseHsts ();
       }
 
-      InitializeDatabase (app);
+      // InitializeDatabase (app);
 
       // app.UseHttpsRedirection ();
       app.UseStaticFiles ();
