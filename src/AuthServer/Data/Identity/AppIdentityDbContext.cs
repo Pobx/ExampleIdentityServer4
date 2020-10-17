@@ -8,10 +8,10 @@ namespace AuthServer.Data.Identity {
 
     }
 
-    protected override void OnModelCreating (ModelBuilder builder) {
-      base.OnModelCreating (builder);
-      builder.Entity<IdentityRole> ().HasData (new IdentityRole { Name = Constants.Roles.Consumer, NormalizedName = Constants.Roles.Consumer.ToUpper () });
-    }
+    // protected override void OnModelCreating (ModelBuilder builder) {
+    //   base.OnModelCreating (builder);
+    //   builder.Entity<IdentityRole> ().HasData (new IdentityRole { Name = Constants.Roles.Consumer, NormalizedName = Constants.Roles.Consumer.ToUpper () });
+    // }
 
   }
 }
