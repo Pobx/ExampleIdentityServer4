@@ -20,42 +20,57 @@ namespace AuthServer {
       Configuration = configuration;
     }
 
-    public IConfiguration Configuration { get; }
+    public Startup(IConfiguration configuration, AppDbSettings appDbSettings) 
+        {
+          this.Configuration = configuration;
+              this.appDbSettings = appDbSettings;
+               
+        }
+            public IConfiguration Configuration { get; }
     private AppDbSettings appDbSettings { get; set; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices (IServiceCollection services) {
       services.AddControllersWithViews ();
 
-      services.Configure<AppDbSettings> (Configuration.GetSection ("ConnectionString"));
+      // services.Configure<AppDbSettings> (Configuration.GetSection ("ConnectionString"));
 
       appDbSettings = Configuration.GetSection ("AuthServer").Get<AppDbSettings> ();
+      var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-      services.AddDbContext<AppIdentityDbContext> (options => options.UseSqlServer (appDbSettings.ConnectionString));
+      // services.AddDbContext<AppIdentityDbContext> (options => options.UseSqlServer (appDbSettings.ConnectionString));
 
-      services.AddIdentity<AppUser, IdentityRole> (options => {
-          options.Password.RequireDigit = false;
-          options.Password.RequireLowercase = false;
-          options.Password.RequireNonAlphanumeric = false;
-          options.Password.RequireUppercase = false;
-          // options.Password.RequiredUniqueChars = false;
-          options.Password.RequiredLength = 4;
+      // services.AddIdentity<AppUser, IdentityRole> (options => {
+      //     options.Password.RequireDigit = false;
+      //     options.Password.RequireLowercase = false;
+      //     options.Password.RequireNonAlphanumeric = false;
+      //     options.Password.RequireUppercase = false;
+      //     // options.Password.RequiredUniqueChars = false;
+      //     options.Password.RequiredLength = 4;
+      //   })
+      //   .AddEntityFrameworkStores<AppIdentityDbContext> ()
+      //   .AddDefaultTokenProviders ();
+
+      // services.AddIdentityServer ()
+      //   .AddOperationalStore (options => {
+
+      //     options.ConfigureDbContext = builder => builder.UseSqlServer (appDbSettings.ConnectionString);
+      //     options.EnableTokenCleanup = true;
+      //     // options.TokenCleanupInterval = 30;
+      //   })
+      //   .AddInMemoryIdentityResources (Config.GetIdentityResources ())
+      //   .AddInMemoryApiResources (Config.GetApiResources ())
+      //   .AddInMemoryClients (Config.GetClients ())
+      //   .AddAspNetIdentity<AppUser> ()
+        // .AddDeveloperSigningCredential ();
+
+        services.AddIdentityServer()
+        .AddConfigurationStore(options => {
+          options.ConfigureDbContext = b => b.UseSqlServer(appDbSettings.ConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
         })
-        .AddEntityFrameworkStores<AppIdentityDbContext> ()
-        .AddDefaultTokenProviders ();
-
-      services.AddIdentityServer ()
-        .AddOperationalStore (options => {
-
-          options.ConfigureDbContext = builder => builder.UseSqlServer (appDbSettings.ConnectionString);
-          options.EnableTokenCleanup = true;
-          // options.TokenCleanupInterval = 30;
-        })
-        .AddInMemoryIdentityResources (Config.GetIdentityResources ())
-        .AddInMemoryApiResources (Config.GetApiResources ())
-        .AddInMemoryClients (Config.GetClients ())
-        .AddAspNetIdentity<AppUser> ()
-        .AddDeveloperSigningCredential ();
+        .AddOperationalStore(options => {
+          options.ConfigureDbContext = b => b.UseSqlServer(appDbSettings.ConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+        });
 
       services.AddCors (options => options.AddPolicy ("AllowAll", p => p.AllowAnyOrigin ()
         .AllowAnyMethod ()
