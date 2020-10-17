@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AuthServer.Data.Identity;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -20,13 +21,12 @@ namespace AuthServer {
       Configuration = configuration;
     }
 
-    public Startup(IConfiguration configuration, AppDbSettings appDbSettings) 
-        {
-          this.Configuration = configuration;
-              this.appDbSettings = appDbSettings;
-               
-        }
-            public IConfiguration Configuration { get; }
+    public Startup (IConfiguration configuration, AppDbSettings appDbSettings) {
+      this.Configuration = configuration;
+      this.appDbSettings = appDbSettings;
+
+    }
+    public IConfiguration Configuration { get; }
     private AppDbSettings appDbSettings { get; set; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -36,7 +36,7 @@ namespace AuthServer {
       // services.Configure<AppDbSettings> (Configuration.GetSection ("ConnectionString"));
 
       appDbSettings = Configuration.GetSection ("AuthServer").Get<AppDbSettings> ();
-      var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+      var migrationsAssembly = typeof (Startup).GetTypeInfo ().Assembly.GetName ().Name;
 
       // services.AddDbContext<AppIdentityDbContext> (options => options.UseSqlServer (appDbSettings.ConnectionString));
 
@@ -62,14 +62,14 @@ namespace AuthServer {
       //   .AddInMemoryApiResources (Config.GetApiResources ())
       //   .AddInMemoryClients (Config.GetClients ())
       //   .AddAspNetIdentity<AppUser> ()
-        // .AddDeveloperSigningCredential ();
+      // .AddDeveloperSigningCredential ();
 
-        services.AddIdentityServer()
-        .AddConfigurationStore(options => {
-          options.ConfigureDbContext = b => b.UseSqlServer(appDbSettings.ConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+      services.AddIdentityServer ()
+        .AddConfigurationStore (options => {
+          options.ConfigureDbContext = b => b.UseSqlServer (appDbSettings.ConnectionString, sql => sql.MigrationsAssembly (migrationsAssembly));
         })
-        .AddOperationalStore(options => {
-          options.ConfigureDbContext = b => b.UseSqlServer(appDbSettings.ConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+        .AddOperationalStore (options => {
+          options.ConfigureDbContext = b => b.UseSqlServer (appDbSettings.ConnectionString, sql => sql.MigrationsAssembly (migrationsAssembly));
         });
 
       services.AddCors (options => options.AddPolicy ("AllowAll", p => p.AllowAnyOrigin ()
@@ -102,5 +102,35 @@ namespace AuthServer {
           pattern: "{controller=Home}/{action=Index}/{id?}");
       });
     }
+
+    private void InitializeDatabase (IApplicationBuilder app) {
+      using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory> ().CreateScope ()) {
+        serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext> ().Database.Migrate ();
+
+        var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext> ();
+        context.Database.Migrate ();
+        if (!context.Clients.Any ()) {
+          foreach (var client in Config.Clients) {
+            context.Clients.Add (client.ToEntity ());
+          }
+          context.SaveChanges ();
+        }
+
+        if (!context.IdentityResources.Any ()) {
+          foreach (var resource in Config.IdentityResources) {
+            context.IdentityResources.Add (resource.ToEntity ());
+          }
+          context.SaveChanges ();
+        }
+
+        if (!context.ApiScopes.Any ()) {
+          foreach (var resource in Config.ApiScopes) {
+            context.ApiScopes.Add (resource.ToEntity ());
+          }
+          context.SaveChanges ();
+        }
+      }
+    }
+
   }
 }
