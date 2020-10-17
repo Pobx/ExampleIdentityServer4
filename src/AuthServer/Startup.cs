@@ -101,7 +101,7 @@ namespace AuthServer {
         app.UseHsts ();
       }
 
-      // InitializeDatabase (app);
+      InitializeDatabase (app);
 
       // app.UseHttpsRedirection ();
       app.UseStaticFiles ();
@@ -145,6 +145,14 @@ namespace AuthServer {
           }
           context.SaveChanges ();
         }
+
+        if (!context.ApiResources.Any ()) {
+          foreach (var resource in Config.ApiResources) {
+            context.ApiResources.Add (resource.ToEntity ());
+          }
+          context.SaveChanges ();
+        }
+
       }
     }
 
