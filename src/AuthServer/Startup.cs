@@ -101,7 +101,7 @@ namespace AuthServer {
         app.UseHsts ();
       }
 
-      InitializeDatabase (app);
+      // InitializeDatabase (app);
 
       // app.UseHttpsRedirection ();
       app.UseStaticFiles ();
