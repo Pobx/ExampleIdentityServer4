@@ -38,7 +38,7 @@ namespace AuthServer {
       appDbSettings = Configuration.GetSection ("AuthServer").Get<AppDbSettings> ();
       var migrationsAssembly = typeof (Startup).GetTypeInfo ().Assembly.GetName ().Name;
 
-      // services.AddDbContext<AppIdentityDbContext> (options => options.UseSqlServer (appDbSettings.ConnectionString));
+      services.AddDbContext<AppIdentityDbContext> (options => options.UseSqlServer (appDbSettings.ConnectionString));
 
       // services.AddIdentity<AppUser, IdentityRole> (options => {
       //     options.Password.RequireDigit = false;
