@@ -51,4 +51,8 @@ export class RegisterComponent implements OnInit {
       }
     );
   }
+
+  goToLoginPage() {
+    this.authService.login();
+  }
 }
