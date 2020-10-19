@@ -30,13 +30,8 @@ namespace AuthServer.Controllers {
     }
 
     [AllowAnonymous]
-    [HttpPost("Register")]
+    [HttpPost ("Register")]
     public async Task<IActionResult> Register ([FromBody] RegisterRequestViewModel model) {
-      //var aVal = 0; var blowUp = 1 / aVal;
-
-      if (!ModelState.IsValid) {
-        return BadRequest (ModelState);
-      }
 
       var user = new AppUser { UserName = model.Email, Name = model.Name, Email = model.Email };
 
@@ -53,13 +48,8 @@ namespace AuthServer.Controllers {
     }
 
     [AllowAnonymous]
-    [HttpPost("Login")]
+    [HttpPost ("Login")]
     public async Task<IActionResult> Login ([FromBody] RegisterRequestViewModel model) {
-      //var aVal = 0; var blowUp = 1 / aVal;
-
-      if (!ModelState.IsValid) {
-        return BadRequest (ModelState);
-      }
 
       var user = new AppUser { UserName = model.Email, Name = model.Name, Email = model.Email };
 
