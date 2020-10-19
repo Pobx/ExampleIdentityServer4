@@ -76,7 +76,7 @@ namespace AuthServer {
         .AddDefaultTokenProviders ();
 
       services.AddIdentityServer (options => {
-          options.UserInteraction.LoginUrl = "http://localhost:4200/login";
+          // options.UserInteraction.LoginUrl = "http://localhost:4200/login";
         })
         .AddAspNetIdentity<AppUser> ()
         .AddConfigurationStore (options => {
@@ -103,7 +103,7 @@ namespace AuthServer {
         app.UseHsts ();
       }
 
-      // InitializeDatabase (app);
+      InitializeDatabase (app);
 
       // app.UseHttpsRedirection ();
       app.UseStaticFiles ();

@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 
 import { BaseService } from '../../shared/base.service';
 import { ConfigService } from '../../shared/config.service';
-import { RequestLoginModel } from 'src/app/shared/models/RequestLoginModel';
 import { RequestRegisterModel } from 'src/app/shared/models/RequestRegisterModel';
 
 @Injectable({
@@ -30,15 +29,16 @@ export class AuthService extends BaseService {
     });
   }
 
-  // login() {
-  //   return this.manager.signinRedirect();
-  // }
+  getUserData() {
+    this.manager.getUser().then((user) => {
+      this.user = user;
+      console.log(this.user);
+      this.authNavStatusSource.next(this.isAuthenticated());
+    });
+  }
 
-
-  login(data: RequestLoginModel) {
-    return this.http
-    .post(this.configService.authApiURI + '/account/Login', data)
-    .pipe(catchError(this.handleError));
+  login() {
+    return this.manager.signinRedirect();
   }
 
   async completeAuthentication() {
@@ -71,15 +71,16 @@ export class AuthService extends BaseService {
 
 export function getClientSettings(): UserManagerSettings {
   return {
-    authority: 'http://localhost:5000',
+    authority: 'https://localhost:5001',
     client_id: 'angular_spa',
     redirect_uri: 'http://localhost:4200/auth-callback',
-    post_logout_redirect_uri: 'http://localhost:4200/',
-    response_type: 'id_token token',
+    response_type: 'code',
     scope: 'openid profile api1',
-    filterProtocolClaims: true,
-    loadUserInfo: true,
-    automaticSilentRenew: true,
-    silent_redirect_uri: 'http://localhost:4200/silent-refresh.html',
+    post_logout_redirect_uri: 'http://localhost:4200/',
+    // response_type: 'id_token token',
+    // filterProtocolClaims: true,
+    // loadUserInfo: true,
+    // automaticSilentRenew: true,
+    // silent_redirect_uri: 'http://localhost:4200/silent-refresh.html',
   };
 }

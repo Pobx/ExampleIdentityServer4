@@ -5,6 +5,7 @@ import { RegisterComponent } from './account/register/register.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
+  { path: 'auth-callback', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: '**', redirectTo: 'register' },
 ];

@@ -30,6 +30,8 @@ export class RegisterComponent implements OnInit {
       email: [null],
       password: [null],
     });
+
+    this.authService.getUserData();
   }
 
   onSubmit() {
@@ -50,5 +52,9 @@ export class RegisterComponent implements OnInit {
         this.error = error;
       }
     );
+  }
+
+  goToLoginPage() {
+    this.authService.login();
   }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace AuthServer {
@@ -74,11 +75,18 @@ namespace AuthServer {
       RequireConsent = false,
       ClientId = "angular_spa",
       ClientName = "Angular SPA",
-      AllowedGrantTypes = GrantTypes.Implicit,
-      AllowedScopes = { "openid", "profile", "email", "api1" },
+      AllowedGrantTypes = GrantTypes.Code,
+      RequireClientSecret = false,
       RedirectUris = { "http://localhost:4200/auth-callback" },
       PostLogoutRedirectUris = { "http://localhost:4200/" },
       AllowedCorsOrigins = { "http://localhost:4200" },
+      AllowedScopes = { 
+        IdentityServerConstants.StandardScopes.OpenId,
+        IdentityServerConstants.StandardScopes.Profile,
+        "api1"
+       },
+
+      // AllowedScopes = { "openid", "profile", "email", "api1" },
       AllowAccessTokensViaBrowser = true,
       AccessTokenLifetime = 3600
       }

@@ -25,19 +25,5 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    this.requestLoginModel = Object.assign(
-      this.requestLoginModel,
-      this.myForm.getRawValue()
-    );
-
-    this.authService.login(this.requestLoginModel).subscribe(
-      (result) => {
-        console.log(result);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
+  onSubmit() {}
 }
