@@ -37,7 +37,7 @@ export class AuthService extends BaseService {
 
   login(data: RequestLoginModel) {
     return this.http
-    .post(this.configService.authApiURI + '/account/login', data)
+    .post(this.configService.authApiURI + '/account/Login', data)
     .pipe(catchError(this.handleError));
   }
 
@@ -48,7 +48,7 @@ export class AuthService extends BaseService {
 
   register(data: RequestRegisterModel) {
     return this.http
-      .post(this.configService.authApiURI + '/account', data)
+      .post(this.configService.authApiURI + '/account/Register', data)
       .pipe(catchError(this.handleError));
   }
 
