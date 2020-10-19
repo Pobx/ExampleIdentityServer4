@@ -6,6 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 
 import { BaseService } from '../../shared/base.service';
 import { ConfigService } from '../../shared/config.service';
+import { RequestLoginModel } from 'src/app/shared/models/RequestLoginModel';
+import { RequestRegisterModel } from 'src/app/shared/models/RequestRegisterModel';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +30,15 @@ export class AuthService extends BaseService {
     });
   }
 
-  login() {
-    return this.manager.signinRedirect();
+  // login() {
+  //   return this.manager.signinRedirect();
+  // }
+
+
+  login(data: RequestLoginModel) {
+    return this.http
+    .post(this.configService.authApiURI + '/account/login', data)
+    .pipe(catchError(this.handleError));
   }
 
   async completeAuthentication() {
@@ -37,9 +46,9 @@ export class AuthService extends BaseService {
     this.authNavStatusSource.next(this.isAuthenticated());
   }
 
-  register(userRegistration: any) {
+  register(data: RequestRegisterModel) {
     return this.http
-      .post(this.configService.authApiURI + '/account', userRegistration)
+      .post(this.configService.authApiURI + '/account', data)
       .pipe(catchError(this.handleError));
   }
 

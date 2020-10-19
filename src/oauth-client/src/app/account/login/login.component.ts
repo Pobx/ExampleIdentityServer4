@@ -9,12 +9,12 @@ import { RequestLoginModel } from 'src/app/shared/models/RequestLoginModel';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  requestRegisterModel: RequestLoginModel;
+  requestLoginModel: RequestLoginModel;
   myForm: FormGroup;
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.requestRegisterModel = {
+    this.requestLoginModel = {
       email: null,
       password: null,
     };
@@ -26,6 +26,18 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    
+    this.requestLoginModel = Object.assign(
+      this.requestLoginModel,
+      this.myForm.getRawValue()
+    );
+
+    this.authService.login(this.requestLoginModel).subscribe(
+      (result) => {
+        console.log(result);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }
