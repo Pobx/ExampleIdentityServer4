@@ -75,7 +75,9 @@ namespace AuthServer {
         .AddEntityFrameworkStores<AppIdentityDbContext> ()
         .AddDefaultTokenProviders ();
 
-      services.AddIdentityServer ()
+      services.AddIdentityServer (options => {
+          options.UserInteraction.LoginUrl = "http://localhost:4200/login";
+        })
         .AddAspNetIdentity<AppUser> ()
         .AddConfigurationStore (options => {
           options.ConfigureDbContext = b => b.UseSqlServer (appDbSettings.ConnectionString, sql => sql.MigrationsAssembly (migrationsAssembly));

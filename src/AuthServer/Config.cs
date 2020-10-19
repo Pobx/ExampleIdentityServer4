@@ -87,7 +87,8 @@ namespace AuthServer {
     public static IEnumerable<IdentityResource> IdentityResources =>
       new List<IdentityResource> {
         new IdentityResources.OpenId (),
-        new IdentityResources.Profile ()
+        new IdentityResources.Profile (),
+        new IdentityResources.Email()
       };
 
   }
