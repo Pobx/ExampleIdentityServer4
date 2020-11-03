@@ -30,8 +30,6 @@ export class RegisterComponent implements OnInit {
       email: [null],
       password: [null],
     });
-
-    this.authService.getUserData();
   }
 
   onSubmit() {
