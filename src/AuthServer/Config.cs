@@ -78,17 +78,19 @@ namespace AuthServer {
       AllowedGrantTypes = GrantTypes.Implicit,
       RequireClientSecret = false,
       RedirectUris = { "http://localhost:4200/auth-callback" },
-      PostLogoutRedirectUris = { "http://localhost:4200/" },
+      PostLogoutRedirectUris = { "http://localhost:4200/login" },
       AllowedCorsOrigins = { "http://localhost:4200" },
-      AllowedScopes = { 
-        IdentityServerConstants.StandardScopes.OpenId,
-        IdentityServerConstants.StandardScopes.Profile,
-        "api1"
-       },
+      AllowedScopes = {
+      IdentityServerConstants.StandardScopes.OpenId,
+      IdentityServerConstants.StandardScopes.Profile,
+      "api1"
+      },
 
       // AllowedScopes = { "openid", "profile", "email", "api1" },
       AllowAccessTokensViaBrowser = true,
-      AccessTokenLifetime = 3600
+      // AccessTokenLifetime = 3600
+      AccessTokenLifetime = 60
+
       }
     };
 
@@ -96,7 +98,7 @@ namespace AuthServer {
       new List<IdentityResource> {
         new IdentityResources.OpenId (),
         new IdentityResources.Profile (),
-        new IdentityResources.Email()
+        new IdentityResources.Email ()
       };
 
   }

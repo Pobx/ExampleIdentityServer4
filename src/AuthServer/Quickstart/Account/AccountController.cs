@@ -36,13 +36,14 @@ namespace IdentityServerHost.Quickstart.UI {
     private readonly IAuthenticationSchemeProvider _schemeProvider;
     private readonly IEventService _events;
     private readonly UserManager<AppUser> _userManager;
-
+    private readonly SignInManager<AppUser> _signInManager;
     public AccountController (
       IIdentityServerInteractionService interaction,
       IClientStore clientStore,
       IAuthenticationSchemeProvider schemeProvider,
       IEventService events,
       UserManager<AppUser> userManager,
+      SignInManager<AppUser> signInManager,
       TestUserStore users = null) {
       // if the TestUserStore is not in DI, then we'll just use the global users collection
       // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
@@ -53,6 +54,7 @@ namespace IdentityServerHost.Quickstart.UI {
       _schemeProvider = schemeProvider;
       _events = events;
       _userManager = userManager;
+      _signInManager = signInManager;
     }
 
     [HttpPost ("api/account/Register")]
@@ -149,7 +151,7 @@ namespace IdentityServerHost.Quickstart.UI {
 
           if (context != null) {
             if (context.IsNativeClient ()) {
-              Console.WriteLine("============================> IsNativeClient");
+              Console.WriteLine ("============================> IsNativeClient");
               // The client is native, so this change in how to
               // return the response is for better UX for the end user.
               return this.LoadingPage ("Redirect", model.ReturnUrl);
@@ -161,7 +163,7 @@ namespace IdentityServerHost.Quickstart.UI {
 
           // request for a local page
           if (Url.IsLocalUrl (model.ReturnUrl)) {
-              Console.WriteLine("============================> IsLocalUrl");
+            Console.WriteLine ("============================> IsLocalUrl");
 
             return Redirect (model.ReturnUrl);
           } else if (string.IsNullOrEmpty (model.ReturnUrl)) {
@@ -191,7 +193,6 @@ namespace IdentityServerHost.Quickstart.UI {
     public async Task<IActionResult> Logout (string logoutId) {
       // build a model so the logout page knows what to display
       var vm = await BuildLogoutViewModelAsync (logoutId);
-
       if (vm.ShowLogoutPrompt == false) {
         // if the request for logout was properly authenticated from IdentityServer, then
         // we don't need to show the prompt and can just log the user out directly.
@@ -305,6 +306,7 @@ namespace IdentityServerHost.Quickstart.UI {
         return vm;
       }
 
+      await _signInManager.SignOutAsync ();
       var context = await _interaction.GetLogoutContextAsync (logoutId);
       if (context?.ShowSignoutPrompt == false) {
         // it's safe to automatically sign-out
