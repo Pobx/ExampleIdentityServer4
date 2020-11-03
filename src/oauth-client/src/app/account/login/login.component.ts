@@ -12,18 +12,12 @@ export class LoginComponent implements OnInit {
   requestLoginModel: RequestLoginModel;
   myForm: FormGroup;
   constructor(private fb: FormBuilder, private authService: AuthService) {}
-
+  title: string;
   ngOnInit(): void {
-    this.requestLoginModel = {
-      email: null,
-      password: null,
-    };
-
-    this.myForm = this.fb.group({
-      email: [null],
-      password: [null],
-    });
+    this.title = 'Login...';
   }
 
-  onSubmit() {}
+  login() {
+    this.authService.login();
+  }
 }
