@@ -23,10 +23,7 @@ export class AuthService extends BaseService {
   constructor(private http: HttpClient, private configService: ConfigService) {
     super();
 
-    this.manager.getUser().then((user) => {
-      this.user = user;
-      this.authNavStatusSource.next(this.isAuthenticated());
-    });
+    this.getUserData();
   }
 
   getUserData() {
