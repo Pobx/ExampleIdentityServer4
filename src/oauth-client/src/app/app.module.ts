@@ -7,9 +7,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './account/register/register.component';
 import { LoginComponent } from './account/login/login.component';
+import { AuthCallbackComponent } from './account/auth-callback/auth-callback.component';
 
 @NgModule({
-  declarations: [AppComponent, RegisterComponent, LoginComponent],
+  declarations: [AppComponent, RegisterComponent, LoginComponent, AuthCallbackComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
