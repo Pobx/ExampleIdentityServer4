@@ -1,1 +1,8 @@
-<p>auth-callback works!</p>
+<div *ngIf="error">
+  <div class="col-md-8 text-center">
+    <div class="alert alert-warning" role="alert">
+      Oops, there was an error, please try to ต้องทดลองทำ Login ด้วย SPA ด้วย ตอนนี้ใช้ Login ที่ OIDC UI อยู่
+      <!-- <a routerLink="/login">login again</a>. -->
+    </div>
+  </div>
+</div>
