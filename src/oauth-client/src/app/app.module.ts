@@ -8,9 +8,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './account/register/register.component';
 import { LoginComponent } from './account/login/login.component';
 import { AuthCallbackComponent } from './account/auth-callback/auth-callback.component';
+import { HomeComponent } from './account/home/home.component';
 
 @NgModule({
-  declarations: [AppComponent, RegisterComponent, LoginComponent, AuthCallbackComponent],
+  declarations: [AppComponent, RegisterComponent, LoginComponent, AuthCallbackComponent, HomeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
