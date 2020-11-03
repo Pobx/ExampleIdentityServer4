@@ -10,7 +10,9 @@ const routes: Routes = [
   { path: 'auth-callback', component: AuthCallbackComponent },
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
-  { path: '**', redirectTo: 'register' },
+  // { path: '**', redirectTo: 'register' },
+  // Fallback when no prior route is matched
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({
