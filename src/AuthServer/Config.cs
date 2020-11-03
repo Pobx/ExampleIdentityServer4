@@ -75,7 +75,7 @@ namespace AuthServer {
       RequireConsent = false,
       ClientId = "angular_spa",
       ClientName = "Angular SPA",
-      AllowedGrantTypes = GrantTypes.Code,
+      AllowedGrantTypes = GrantTypes.Implicit,
       RequireClientSecret = false,
       RedirectUris = { "http://localhost:4200/auth-callback" },
       PostLogoutRedirectUris = { "http://localhost:4200/" },
