@@ -17,19 +17,14 @@ export class AuthService extends BaseService {
   // Observable navItem stream
   authNavStatus$ = this.authNavStatusSource.asObservable();
 
-  private manager = new UserManager(getClientSettings());
+  public manager = new UserManager(getClientSettings());
   private user: User | null;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
     super();
 
-    this.getUserData();
-  }
-
-  getUserData() {
     this.manager.getUser().then((user) => {
       this.user = user;
-      console.log(this.user);
       this.authNavStatusSource.next(this.isAuthenticated());
     });
   }

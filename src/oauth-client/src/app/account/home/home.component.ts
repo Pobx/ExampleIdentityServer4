@@ -8,8 +8,14 @@ import { AuthService } from 'src/app/core/authentication/auth.service';
 })
 export class HomeComponent implements OnInit {
   constructor(private authService: AuthService) {}
-
-  ngOnInit(): void {}
+  authorizeValue: string;
+  name: string;
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.authorizeValue = this.authService.authorizationHeaderValue;
+      this.name = this.authService.name;
+    }, 2000);
+  }
 
   clickSignOut() {
     this.authService.signout();

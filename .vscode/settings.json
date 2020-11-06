@@ -1,0 +1,3 @@
+{
+  "typescript.tsdk": "src/oauth-client/node_modules/typescript/lib",
+}
