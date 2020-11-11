@@ -11,10 +11,8 @@ export class HomeComponent implements OnInit {
   authorizeValue: string;
   name: string;
   ngOnInit(): void {
-    setTimeout(() => {
-      this.authorizeValue = this.authService.authorizationHeaderValue;
-      this.name = this.authService.name;
-    }, 2000);
+    this.authorizeValue = this.authService.authorizationHeaderValue;
+    this.name = this.authService.name;
   }
 
   clickSignOut() {

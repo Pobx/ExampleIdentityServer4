@@ -17,12 +17,15 @@ export class AuthCallbackComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.error = false;
     const messageUrl = this.route.snapshot.fragment;
     if (messageUrl.indexOf('error') >= 0) {
       this.error = true;
     }
 
     this.authService.completeAuthentication();
-    this.router.navigate(['/home']);
+    setTimeout(() => {
+      this.router.navigate(['/home']);
+    }, 2000);
   }
 }

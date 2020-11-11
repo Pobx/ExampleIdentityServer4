@@ -1,28 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
 import { UserManager, UserManagerSettings, User } from 'oidc-client';
-import { BehaviorSubject } from 'rxjs';
-
-import { BaseService } from '../../shared/base.service';
-import { ConfigService } from '../../shared/config.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { RequestRegisterModel } from 'src/app/shared/models/RequestRegisterModel';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService extends BaseService {
-  // Observable navItem source
+export class AuthService {
+  private api: string;
   private authNavStatusSource = new BehaviorSubject<boolean>(false);
-  // Observable navItem stream
-  authNavStatus$ = this.authNavStatusSource.asObservable();
+  publicauthNavStatus$: Observable<boolean> = this.authNavStatusSource;
 
   public manager = new UserManager(getClientSettings());
   private user: User | null;
 
-  constructor(private http: HttpClient, private configService: ConfigService) {
-    super();
-
+  constructor(private http: HttpClient) {
+    this.api = environment.authApiURI;
     this.manager.getUser().then((user) => {
       this.user = user;
       this.authNavStatusSource.next(this.isAuthenticated());
@@ -39,9 +34,7 @@ export class AuthService extends BaseService {
   }
 
   register(data: RequestRegisterModel) {
-    return this.http
-      .post(this.configService.authApiURI + '/account/Register', data)
-      .pipe(catchError(this.handleError));
+    return this.http.post(`${this.api}/account/Register`, data);
   }
 
   isAuthenticated(): boolean {
